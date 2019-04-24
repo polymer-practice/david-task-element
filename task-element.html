@@ -12,22 +12,31 @@
         color: var(--text-color);
         font-size: var(--font-size);
       }
-      .task-element {
+      .task {
         display: flex;
         align-items: center;
       }
-      iron-icon, .task-element__title {
+      iron-icon, .task__title {
         color: inherit;
         font-size: inherit;
       }
-      .task-element__title {
+      .task__title {
         margin-left: .5em;
       }
+      .done {
+        color: green;
+      }
+      .canceled {
+        color: red;
+      }
+      .pending {
+        color: yellow;
+      }
     </style>
-    <ol class="task-element">
+    <ol class=[[classes]]>
       <iron-icon icon=[[icon]]></iron-icon>
-      <span class="task-element__title">[[title]]</span>
-    <ol>
+      <span class="task__title">[[title]]</span>
+    </ol>
   </template>
 
   <script>
@@ -44,8 +53,31 @@
       static get properties() {
         return {
           icon: String,
-          title: String
+          title: String,
+          done: {
+            type: Boolean,
+            value: false,
+          },
+          canceled: {
+            type: Boolean,
+            value: false
+          },
+          classes: {
+            type: String,
+            computed: "hasState(done, canceled)"
+          }
         };
+      }
+      hasState(done, canceled) {
+        if (done && canceled) {
+         return 'task'; 
+        } else if (done) {
+          return 'task done';
+        } else if (canceled) {
+          return 'task canceled';
+        } else {
+          return 'task';
+        }
       }
     }
 

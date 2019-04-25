@@ -7,7 +7,11 @@
     <style>
       :host {
         display: block;
-        --text-color: blue;
+        --default-color: blue;
+        --text-color: var(--default-color);
+        --pending-color: var(--default-color);
+        --done-color: green;
+        --canceled-color: red;
         --font-size: 1.5em;
         color: var(--text-color);
         font-size: var(--font-size);
@@ -15,6 +19,8 @@
       .task {
         display: flex;
         align-items: center;
+        justify-content: flex-start;
+        flex-wrap: wrap;
       }
       iron-icon, .task__title {
         color: inherit;
@@ -24,18 +30,53 @@
         margin-left: .5em;
       }
       .done {
-        color: green;
+        color: var(--done-color);
       }
       .canceled {
-        color: red;
+        color: var(--canceled-color);
       }
       .pending {
-        color: yellow;
+        color: var(--pending-color);
+      }
+      .done, .canceled {
+        text-decoration-line: line-through;
+        text-decoration-style: wavy; 
+      }
+      .buttons-set {
+        margin-left: auto;
+      }
+      button {
+        appearance: none;
+        padding: 1em;
+        color: white;
+        border: 1px solid transparent;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .btn.pending {
+        background-color: var(--pending-color);
+      }
+      .btn-canceled {
+        background-color: var(--canceled-color);
+      }
+      .btn-done {
+        background-color: var(--done-color);
       }
     </style>
-    <ol class=[[classes]]>
+    <ol class$="[[getClasses()]]">
       <iron-icon icon=[[icon]]></iron-icon>
       <span class="task__title">[[title]]</span>
+      <div class="task__buttons">
+        <template is="dom-if" if=[[_showPending]]>
+            <button name="pending" class="btn-pending" on-click="onClickButton">[[buttonsText.pending]]</button>
+        </template>
+        <template is="dom-if" if=[[_showDone]]>
+          <button name="done" class="btn-done" on-click="onClickButton">[[buttonsText.done]]</button>
+        </template>
+        <template is="dom-if" if=[[_showCanceled]]>
+            <button name="canceled" class="btn-canceled" on-click="onClickButton">[[buttonsText.canceled]]</button>
+        </template>
+      </div>
     </ol>
   </template>
 
@@ -52,6 +93,7 @@
       static get is() { return 'task-element'; }
       static get properties() {
         return {
+          id: String,
           icon: String,
           title: String,
           done: {
@@ -62,22 +104,66 @@
             type: Boolean,
             value: false
           },
-          classes: {
+          state: {
             type: String,
-            computed: "hasState(done, canceled)"
+            computed: 'hasState(done, canceled)'
+          },
+          buttonsText: {
+            type: Object,
+            value: {
+              done: 'Done',
+              canceled: 'Canceled',
+              pending: 'Pending'
+            }
+          },
+          _showPending: {
+            type: Boolean,
+            value: false
+          },
+          _showDone: {
+            type: Boolean,
+            value: true
+          },
+          _showCanceled: {
+            type: Boolean,
+            value: true
           }
         };
       }
       hasState(done, canceled) {
-        if (done && canceled) {
-         return 'task'; 
-        } else if (done) {
-          return 'task done';
+        let state = 'task';
+
+        if (done) {
+          this._showPending = true;
+          this._showDone = false;
+          this._showCanceled = true;
+          return state + ' done';
         } else if (canceled) {
-          return 'task canceled';
+          this._showPending = true;
+          this._showDone = true;
+          this._showCanceled = false;
+          return state + ' canceled';
         } else {
-          return 'task';
+          this._showPending = false;
+          this._showDone = true;
+          this._showCanceled = true;
+          return state + ' pending';
         }
+      }
+      getClasses() {
+        return this.state;
+      }
+      toggleHideButton() {
+        this.state
+      }
+      onClickButton(event) {
+        let eventName = event.target.name;
+        let firedEvent = new CustomEvent(event.target.name, { 
+          bubbles: true, 
+          composed: true,
+          detail: { extraInfo: eventName } 
+        });
+        this.dispatchEvent(firedEvent);
       }
     }
 

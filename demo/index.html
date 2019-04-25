@@ -6,10 +6,10 @@
 
     <title>task-element demo</title>
 
-    <script src="../bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
 
-    <link rel="import" href="../bower_components/iron-demo-helpers/demo-pages-shared-styles.html">
-    <link rel="import" href="../bower_components/iron-demo-helpers/demo-snippet.html">
+    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
     <link rel="import" href="../task-element.html">
 
     <custom-style>
@@ -22,9 +22,19 @@
       <h3>Basic task-element demo</h3>
       <demo-snippet>
         <template>
-          <task-element title="This is a sample title" icon="radio-button-checked" done="true" canceled="false"></task-element>
+          <task-element id="task1" title="This is the first task element" icon="radio-button-checked" done></task-element>
+          <task-element id="task2" title="This is the second task element" icon="radio-button-checked"></task-element>
+          <task-element id="task3" title="This is the third task element" icon="radio-button-checked" canceled></task-element>
         </template>
       </demo-snippet>
     </div>
+    <script>
+      let root = document.querySelector('body');
+
+      root.addEventListener('pending', (e) => { console.log('Pending', e.detail) });
+      root.addEventListener('done', (e) => { console.log('Done', e.detail) });
+      root.addEventListener('canceled', (e) => { console.log('Canceled', e.detail) });
+    
+    </script>
   </body>
 </html>

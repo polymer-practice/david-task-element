@@ -7,12 +7,12 @@
     <style>
       :host {
         display: block;
-        --default-color: blue;
+        --default-color: rgb(133, 156, 219);
         --text-color: var(--default-color);
         --pending-color: var(--default-color);
-        --done-color: green;
-        --canceled-color: red;
-        --font-size: 1.5em;
+        --done-color: rgb(120, 207, 149);
+        --canceled-color: rgb(224, 112, 142);
+        --font-size: 18px;
         color: var(--text-color);
         font-size: var(--font-size);
       }
@@ -22,6 +22,10 @@
         justify-content: flex-start;
         flex-wrap: wrap;
         margin: 1em auto;
+      }
+      .task__body {
+        display: flex;
+        align-items: center;
       }
       iron-icon, .task__title {
         color: inherit;
@@ -40,16 +44,16 @@
         color: var(--pending-color);
       }
       .done, .canceled {
-        text-decoration-line: line-through;
-        text-decoration-style: wavy; 
+        text-decoration-line: line-through; 
       }
       .task__buttons {
         margin-left: auto;
       }
       button {
         appearance: none;
-        padding: 1em;
+        padding: .5em 1em;
         color: white;
+        font-size: var(--font-size);
         border: 1px solid transparent;
         border-radius: 5px;
         cursor: pointer;
@@ -85,8 +89,10 @@
       } 
     </style>
     <li class$="[[getClasses()]]">
-      <iron-icon icon=[[icon]]></iron-icon>
-      <span class="task__title">[[title]]</span>
+      <div class="task__body">
+        <iron-icon icon=[[icon]]></iron-icon>
+        <span class="task__title">[[title]]</span>
+      </div>
       <div class="task__buttons">
         <template is="dom-if" if=[[_showPending]]>
             <button name="pending" class="btn-pending" on-click="onClickButton">[[buttonsText.pending]]</button>

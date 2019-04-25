@@ -42,7 +42,7 @@
         text-decoration-line: line-through;
         text-decoration-style: wavy; 
       }
-      .buttons-set {
+      .task__buttons {
         margin-left: auto;
       }
       button {
@@ -53,15 +53,35 @@
         border-radius: 5px;
         cursor: pointer;
       }
-      .btn.pending {
+      .btn-pending {
         background-color: var(--pending-color);
-      }
-      .btn-canceled {
-        background-color: var(--canceled-color);
       }
       .btn-done {
         background-color: var(--done-color);
       }
+      .btn-canceled {
+        background-color: var(--canceled-color);
+      }
+      .btn-pending:hover, .btn-pending:active {
+        color: var(--pending-color);
+        border: 1px solid var(--pending-color);
+      }
+      .btn-done:hover, .btn-done:active {
+        color: var(--done-color);
+        border: 1px solid var(--done-color);
+      }
+      .btn-canceled:hover, .btn-canceled:active {
+        color: var(--canceled-color);
+        border: 1px solid var(--canceled-color);
+      }
+      .btn-pending:hover, 
+      .btn-pending:active,
+      .btn-done:hover, 
+      .btn-done:active,
+      .btn-canceled:hover, 
+      .btn-canceled:active {
+        background-color: white;
+      } 
     </style>
     <ol class$="[[getClasses()]]">
       <iron-icon icon=[[icon]]></iron-icon>

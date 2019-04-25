@@ -115,7 +115,10 @@
       static get properties() {
         return {
           id: String,
-          icon: String,
+          icon: {
+            type: String,
+            value: 'radio-button-checked'
+          },
           title: String,
           done: {
             type: Boolean,

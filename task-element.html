@@ -193,7 +193,10 @@
         let firedEvent = new CustomEvent(event.target.name, { 
           bubbles: true, 
           composed: true,
-          detail: { extraInfo: eventName } 
+          detail: { 
+            extraInfo: eventName,
+            id: this.id
+          } 
         });
         this.dispatchEvent(firedEvent);
       }

@@ -6,33 +6,32 @@
   <template>
     <style>
       :host {
-        display: block;
-        --default-color: rgb(133, 156, 219);
-        --text-color: var(--default-color);
-        --pending-color: var(--default-color);
-        --done-color: rgb(120, 207, 149);
-        --canceled-color: rgb(224, 112, 142);
+        --text-color: var(--task-element-text-color, #FFFFFF);
+        --pending-color:  #F18701;
+        --done-color: #F7B801;
+        --canceled-color: #F35B04;
         --font-size: 18px;
         --title-width: 250px;
         color: var(--text-color);
+        display: block;
         font-size: var(--font-size);
       }
       .task {
-        display: flex;
         align-items: center;
-        justify-content: flex-start;
+        background-color: var(--task-element-bg-color, #7678ED);
+        border-radius: 5px;
+        display: flex;
         flex-wrap: wrap;
+        justify-content: flex-start;
         margin: 1em auto;
-      }
-      .task__body {
-        display: flex;
-        align-items: center;
+        padding: 1em;
       }
       iron-icon, .task__title {
         color: inherit;
         font-size: inherit;
       }
       .task__title {
+        color: var(--text-color);
         margin-left: .5em;
         max-width: var(--title-width);
       }
@@ -45,20 +44,18 @@
       .pending {
         color: var(--pending-color);
       }
-      .done, .canceled {
-        text-decoration-line: line-through; 
-      }
       .task__buttons {
-        margin-left: auto;
+        padding: .5em 0;
       }
       button {
         appearance: none;
-        padding: .5em 1em;
-        color: white;
-        font-size: inherit;
         border: 1px solid transparent;
         border-radius: 5px;
+        color: var(--text-color);
         cursor: pointer;
+        font-size: var(--task-element-font-size, 16px);
+        margin-top: .2em;
+        padding: .5em 1em;
       }
       .btn-pending {
         background-color: var(--pending-color);
@@ -69,26 +66,12 @@
       .btn-canceled {
         background-color: var(--canceled-color);
       }
-      .btn-pending:hover, .btn-pending:active {
-        color: var(--pending-color);
-        border: 1px solid var(--pending-color);
+      @media screen and (min-width: 600px) {
+        .task__buttons {
+          margin: 0;
+          margin-left: auto;
+        }
       }
-      .btn-done:hover, .btn-done:active {
-        color: var(--done-color);
-        border: 1px solid var(--done-color);
-      }
-      .btn-canceled:hover, .btn-canceled:active {
-        color: var(--canceled-color);
-        border: 1px solid var(--canceled-color);
-      }
-      .btn-pending:hover, 
-      .btn-pending:active,
-      .btn-done:hover, 
-      .btn-done:active,
-      .btn-canceled:hover, 
-      .btn-canceled:active {
-        background-color: white;
-      } 
     </style>
     <li class$="[[getClasses()]]">
       <div class="task__body">
@@ -102,7 +85,7 @@
         <template is="dom-if" if=[[_showDone]]>
           <button name="done" class="btn-done" on-click="onClickButton">[[buttonsText.done]]</button>
         </template>
-        <template is="dom-if" if=[[_showCanceled]]>
+        <template is="dom-if" if=[[_showCanceled]]></template>
             <button name="canceled" class="btn-canceled" on-click="onClickButton">[[buttonsText.canceled]]</button>
         </template>
       </div>
@@ -125,7 +108,7 @@
           id: String,
           icon: {
             type: String,
-            value: 'radio-button-checked'
+            value: 'label'
           },
           title: String,
           done: {
